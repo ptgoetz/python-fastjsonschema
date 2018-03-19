@@ -8,23 +8,23 @@ all:
 
 
 deb:
-	python3 setup.py --command-packages=stdeb.command bdist_deb
+	python setup.py --command-packages=stdeb.command bdist_deb
 
 upload:
-	python3 setup.py register sdist upload
+	python setup.py register sdist upload
 
 install:
 	pip install --editable .[test]
 
 test:
-	python3 -m pytest tests
+	python -m pytest tests
 
 performance:
-	python3 performance.py
+	python performance.py
 
 doc:
 	cd docs; make
 
 clean:
-	python3 setup.py clean
+	python setup.py clean
 	find . -name '*.pyc' -delete

@@ -46,7 +46,7 @@ Note that there are some differences compared to JSON schema standard:
  * JSON schema says you can use keyword ``default`` for providing default values. This implementation
    uses that and always returns transformed input data.
 
-Support only for Python 3.3 and higher.
+Support only for Python 2.7, 3.3 and higher.
 """
 
 from .exceptions import JsonSchemaException

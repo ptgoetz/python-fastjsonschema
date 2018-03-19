@@ -38,10 +38,15 @@ class CodeGenerator:
         'boolean': 'bool',
         'number': 'int, float',
         'integer': 'int',
-        'string': 'str',
+        'string': 'basestring',
         'array': 'list',
         'object': 'dict',
     }
+
+    try:
+        basestring
+    except NameError:
+        JSON_TYPE_TO_PYTHON_TYPE['string'] = 'str'
 
     def __init__(self, definition):
         self._code = []
@@ -153,6 +158,7 @@ class CodeGenerator:
         Creates base code of validation function and calls helper
         for creating code by definition.
         """
+        self.l('from __future__ import division')
         with self.l('def func(data):'):
             self.l('NoneType = type(None)')
             self.generate_func_code_block(definition, 'data', 'data')
@@ -286,21 +292,21 @@ class CodeGenerator:
             self.l('else: raise JsonSchemaException("{name} must not be valid by not definition")')
 
     def generate_min_length(self):
-        with self.l('if not isinstance({variable}, str):'):
+        with self.l('if not isinstance({variable}, {}):', CodeGenerator.JSON_TYPE_TO_PYTHON_TYPE["string"]):
             self.l('return {variable}')
         self.create_variable_with_length()
         with self.l('if {variable}_len < {minLength}:'):
             self.l('raise JsonSchemaException("{name} must be longer than or equal to {minLength} characters")')
 
     def generate_max_length(self):
-        with self.l('if not isinstance({variable}, str):'):
+        with self.l('if not isinstance({variable}, {}):', CodeGenerator.JSON_TYPE_TO_PYTHON_TYPE["string"]):
             self.l('return {variable}')
         self.create_variable_with_length()
         with self.l('if {variable}_len > {maxLength}:'):
             self.l('raise JsonSchemaException("{name} must be shorter than or equal to {maxLength} characters")')
 
     def generate_pattern(self):
-        with self.l('if not isinstance({variable}, str):'):
+        with self.l('if not isinstance({variable}, {}):', CodeGenerator.JSON_TYPE_TO_PYTHON_TYPE["string"]):
             self.l('return {variable}')
         self._compile_regexps['{}_re'.format(self._variable)] = re.compile(self._definition['pattern'])
         with self.l('if not {variable}_re.search({variable}):'):

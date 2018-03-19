@@ -3,25 +3,42 @@
 
 """Run a JSON Schema test suite and print results."""
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 from collections import Counter, defaultdict, namedtuple
-from enum import Enum, auto
-from pathlib import Path
 from textwrap import dedent
 import argparse
-import configparser
 import json
 import sys
+
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
+
+try:
+    from enum import Enum, unique
+except ImportError:
+    from enum import Enum, unique
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib2 import Path
 
 from colorama import Fore
 import fastjsonschema
 
+@unique
 class TestResult(Enum):
-    FALSE_POSITIVE = auto()
-    TRUE_POSITIVE = auto()
-    FALSE_NEGATIVE = auto()
-    TRUE_NEGATIVE = auto()
-    UNDEFINED = auto()
-    IGNORED = auto()
+    FALSE_POSITIVE = 0
+    TRUE_POSITIVE = 1
+    FALSE_NEGATIVE = 2
+    TRUE_NEGATIVE = 3
+    UNDEFINED = 4
+    IGNORED = 5
 
 Test = namedtuple("Test", "description exception result ignore")
 

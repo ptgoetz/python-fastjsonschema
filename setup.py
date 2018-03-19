@@ -14,8 +14,10 @@ setup(
     extras_require={
         "test": [
             "colorama",
+            "enum34;python_version<'3.4'",
             "jsonschema",
             "json-spec",
+            "pathlib2;python_version<'3.4'",
             "pytest",
             "validictory",
         ],
@@ -29,6 +31,7 @@ setup(
 
     classifiers=[
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
